@@ -74,9 +74,9 @@ export default function Sidebar() {
               <h3 className="text-sm font-semibold text-white mb-2">
                 Navigation
               </h3>
-              <div className="space-y-2 border border-black rounded-sm overflow-hidden">
+              <div className="space-y-2 overflow-hidden">
                 <button
-                  className={`flex text-lg items-center w-full px-4 py-3 ${
+                  className={`flex text-lg items-center w-full px-4 py-3 border border-black shadow-sm rounded-sm ${
                     activeComponent === "dashboard"
                       ? "bg-yellow-200"
                       : "bg-white"
@@ -97,7 +97,7 @@ export default function Sidebar() {
                 </button>
 
                 <button
-                  className={`flex text-lg items-center w-full px-4 py-3 ${
+                  className={`flex text-lg items-center w-full px-4 py-3 border border-black shadow-sm rounded-sm ${
                     activeComponent === "statement"
                       ? "bg-yellow-200"
                       : "bg-white"
@@ -121,7 +121,15 @@ export default function Sidebar() {
 
             {/* Bottom Actions */}
             <div className="absolute bottom-6 left-6 space-y-4">
-              <button className="flex items-center space-x-2 text-white hover:text-gray-200">
+              <button
+                className={`flex items-center space-x-2 text-white hover:text-gray-200 ${
+                  activeComponent === "settings" ? "text-yellow-200" : ""
+                }`}
+                onClick={() => {
+                  setActiveComponent("settings");
+                  toggleMenu();
+                }}
+              >
                 <FaCog />
                 <span>Settings</span>
               </button>

@@ -10,7 +10,6 @@ import {
 import api from "../api-services/api-services";
 import axios from "axios";
 import Loading from "@/components/ui/loading";
-import { useRouter } from "next/navigation";
 
 const PUBLIC_ROUTES = ["/login"];
 
@@ -43,7 +42,6 @@ function decodeJWT(token: string) {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [username, setUsername] = useState<string | null>(null);
@@ -67,7 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       })
       .then(() => {
         if (PUBLIC_ROUTES.includes(pathname)) {
-          router.push("/dashboard");
+          window.location.href = "/dashboard";
         } else {
           setLoading(false);
           setIsAuthenticated(true);
@@ -106,7 +104,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             );
 
             if (PUBLIC_ROUTES.includes(pathname)) {
-              router.push("/dashboard");
+              window.location.href = "/dashboard";
             } else {
               setLoading(false);
               setIsAuthenticated(true);
@@ -118,7 +116,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           handleAuthFailure();
         }
       });
-  }, [router]);
+  }, []);
 
   // Helper function to handle authentication failure
   const handleAuthFailure = () => {
@@ -128,7 +126,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUsername(null);
       localStorage.removeItem("access_token");
       localStorage.removeItem("refresh_token");
-      router.push("/login");
+      window.location.href = "/login";
     }
   };
 
@@ -159,7 +157,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUsername(null);
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
-    router.push("/login");
+    window.location.href = "/login";
   };
 
   if (loading) {

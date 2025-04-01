@@ -49,7 +49,7 @@ export default function LoginPage() {
     try {
       setIsLoading(true);
       await login(data.phone, data.password);
-      router.push("/dashboard");
+      window.location.href = "/dashboard";
     } catch (error) {
       toast.error("Invalid credentials");
     } finally {

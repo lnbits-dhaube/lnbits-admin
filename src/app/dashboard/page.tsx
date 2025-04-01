@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import WalletCard from "@/components/WalletCard";
 import Transactions from "@/components/Transactions";
 import Statement from "@/components/Statement";
+import Settings from "@/components/Settings";
 import { DashboardProvider, useDashboard } from "@/context/DashboardContext";
 
 export default function Dashboard() {
@@ -41,9 +42,15 @@ function DashboardContent() {
             </div>
           )}
 
-          {/* Transactions/Statement */}
+          {/* Transactions/Statement/Settings */}
           <div className="mt-6">
-            {activeComponent === "dashboard" ? <Transactions /> : <Statement />}
+            {activeComponent === "dashboard" ? (
+              <Transactions />
+            ) : activeComponent === "statement" ? (
+              <Statement />
+            ) : (
+              <Settings />
+            )}
           </div>
         </div>
       </main>
