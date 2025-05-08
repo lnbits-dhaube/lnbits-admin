@@ -24,7 +24,7 @@ import Spinner from "@/components/ui/spinner";
 import { useRouter } from "next/navigation";
 
 const LoginSchema = z.object({
-  phone: z.string().min(7, "Mobile number is too short"),
+  username: z.string().min(3, "Username is too short"),
   password: z.string().min(3, "Password must be atleast 3 characters"),
   remember: z.boolean(),
 });
@@ -39,7 +39,7 @@ export default function LoginPage() {
   const methods = useForm<LoginSchemaType>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
-      phone: "",
+      username: "",
       password: "",
       remember: false,
     },
@@ -48,7 +48,7 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginSchemaType) => {
     try {
       setIsLoading(true);
-      await login(data.phone, data.password);
+      await login(data.username, data.password);
       window.location.href = "/dashboard";
     } catch (error) {
       toast.error("Invalid credentials");
@@ -85,8 +85,8 @@ export default function LoginPage() {
                 <Input
                   type="text"
                   className="pl-10 h-14 text-lg md:text-lg"
-                  placeholder="Mobile number"
-                  {...methods.register("phone")}
+                  placeholder="Username"
+                  {...methods.register("username")}
                   disabled={isLoading}
                 />
               </div>

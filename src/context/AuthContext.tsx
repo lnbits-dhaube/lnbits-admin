@@ -10,12 +10,13 @@ import {
 import api from "../api-services/api-services";
 import axios from "axios";
 import Loading from "@/components/ui/loading";
+import PinUpdateModal from "@/components/PinUpdateModal";
 
 const PUBLIC_ROUTES = ["/login"];
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: (phone: string, password: string) => Promise<void>;
+  login: (username: string, password: string) => Promise<void>;
   logout: () => void;
   username: string | null;
 }
@@ -45,6 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [username, setUsername] = useState<string | null>(null);
+  const [showPinModal, setShowPinModal] = useState(false);
 
   useEffect(() => {
     const pathname = window.location.pathname;
@@ -63,12 +65,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           Authorization: token ? `Bearer ${token}` : "",
         },
       })
-      .then(() => {
+      .then(async () => {
         if (PUBLIC_ROUTES.includes(pathname)) {
           window.location.href = "/dashboard";
         } else {
           setLoading(false);
           setIsAuthenticated(true);
+
+          // Check if user has updated PIN
+          // try {
+          //   const pinStatus = await api.get("/users/me/has-updated-pin");
+          //   console.log("PIN Update Status:", pinStatus.data);
+          //   if (!pinStatus.data.hasUpdatedPin) {
+          //     setShowPinModal(true);
+          //   }
+          // } catch (error) {
+          //   console.error("Error checking PIN status:", error);
+          // }
         }
       })
       .catch(async (_) => {
@@ -130,9 +143,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const login = async (phone: string, password: string) => {
-    if (phone && password) {
-      const response = await api.post("/login", { phone, password });
+  const login = async (username: string, password: string) => {
+    if (username && password) {
+      const response = await api.post("/login", { username, password });
       localStorage.setItem("access_token", response.data.access_token);
       localStorage.setItem("refresh_token", response.data.refresh_token);
 
@@ -176,6 +189,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   return (
     <AuthContext.Provider value={{ isAuthenticated, login, logout, username }}>
       {children}
+      <PinUpdateModal isOpen={showPinModal} />
     </AuthContext.Provider>
   );
 }
